@@ -63,6 +63,8 @@ class HttpPingMonitor extends BaseMonitor
             throw InvalidConfiguration::noUrlConfigured();
         }
 
+        $this->responseCode = null;
+
         try {
             $guzzle = new Guzzle([
                 'timeout' => $this->timeout,
@@ -78,11 +80,11 @@ class HttpPingMonitor extends BaseMonitor
                 $this->responseCode = $response->getStatusCode();
                 $this->responseContent = (string)$response->getBody();
             } else {
-                $this->setResponseCodeAndContentOnException($e);
+                $this->responseContent = $e->getMessage();
             }
 
         } catch (\Exception $e) {
-            $this->setResponseCodeAndContentOnException($e);
+            $this->responseContent = $e->getMessage() . PHP_EOL . $e->getTraceAsString();
         }
 
         if ($this->responseCode != '200'
