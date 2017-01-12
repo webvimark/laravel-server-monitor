@@ -1,5 +1,5 @@
 {
-    "name": "ericmakesstuff/laravel-server-monitor",
+    "name": "webvimark/laravel-server-monitor",
     "description": "Server Monitoring Command for Laravel Applications",
     "license": "MIT",
     "authors": [
