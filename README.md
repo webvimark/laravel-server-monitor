@@ -36,6 +36,9 @@ Disk usage monitors check the percentage of the storage space that is used on th
 
 HTTP Ping monitors perform a simple page request and alert if the HTTP status code is _not_ 200. They can optionally check that a certain phrase is included in the source of the page.
 
+> Note: If you provide _checkPhrase_ that should be in response, then HTTP status code is _not_ checked. 
+This way you can check that your *403* page returns something like *{"error":{"code":403,"message":"Invalid authorization headers"}}*
+
 ##### SSL Certificate Monitors
 
 SSL Certificate monitors pull the SSL certificate for the configured URL and make sure it is valid for that URL. Wildcard and multi-domain certificates are supported.

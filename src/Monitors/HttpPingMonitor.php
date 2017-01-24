@@ -87,31 +87,25 @@ class HttpPingMonitor extends BaseMonitor
             $this->responseContent = $e->getMessage() . PHP_EOL . $e->getTraceAsString();
         }
 
-        if ($this->responseCode != '200'
-            || ! $this->checkResponseContains($this->responseContent, $this->checkPhrase)) {
-            event(new HttpPingDown($this));
+        if ($this->checkPhrase) {
+            if ($this->checkResponseContains($this->responseContent, $this->checkPhrase)) {
+                event(new HttpPingUp($this));
+            } else {
+                event(new HttpPingDown($this));
+            }
         } else {
-            event(new HttpPingUp($this));
+            if ($this->responseCode == '200') {
+                event(new HttpPingUp($this));
+            } else {
+                event(new HttpPingDown($this));
+            }
         }
-    }
-
-    /**
-     * @param \Exception $e
-     */
-    protected function setResponseCodeAndContentOnException(\Exception $e)
-    {
-        $this->responseCode = null;
-        $this->responseContent = $e->getMessage() . PHP_EOL . $e->getTraceAsString();
     }
 
     protected function checkResponseContains($html, $phrase)
     {
-        if (!$phrase) {
-            return true;
-        }
-
         $this->responseContainsPhrase = str_contains($html, $phrase);
-        
+
         return $this->responseContainsPhrase;
     }
 
